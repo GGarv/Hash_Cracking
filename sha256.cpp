@@ -96,22 +96,32 @@ std::string sha256(const std::string &input) {
 }
 
 void brute_force_sha256(const std::string &target, bool use_openmp) {
-    std::string input;
-    bool found = false;
+    bool found = false;  // Shared flag indicating if password is found
+    int chunk_size = 1000;  // Adjust chunk size for performance tuning
 
-    #pragma omp parallel for if (use_openmp) shared(found) private(input)
-    for (int i = 0; i < 1000000; ++i) {
-        // Check if the hash was already found (non-parallel-safe check)
-        #pragma omp flush(found)
-        if (found) continue;  // Skip further work if hash was found
+    #pragma omp parallel if (use_openmp) shared(found)
+    {
+        std::string input;  // Private variable for each thread's password attempt
 
-        input = "password" + std::to_string(i);
-        if (sha256(input) == target) {
-            #pragma omp critical
-            {
-                found = true;
-                #pragma omp flush(found)  // Update the `found` flag for all threads
-                std::cout << "Found: " << input << std::endl;
+        // Divide the search space into chunks of size `chunk_size` to avoid synchronization issues
+        #pragma omp for schedule(dynamic, chunk_size)
+        for (int i = 0; i < 100000000; ++i) {
+            // Early exit if another thread found the result
+            if (found) continue;
+
+            // Generate the input string based on the current index
+            input = "password" + std::to_string(i);
+
+            // Check if the current input hash matches the target
+            if (sha256(input) == target) {
+                #pragma omp critical  // Only one thread should write output
+                {
+                    if (!found) {  // Double-check in case another thread found it first
+                        found = true;
+                        std::cout << "Found: " << input << std::endl;
+                    }
+                }
+                #pragma omp flush(found)  // Ensure all threads see the updated `found` value
             }
         }
     }
