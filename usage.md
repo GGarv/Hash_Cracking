@@ -17,6 +17,13 @@ This project demonstrates a brute-force attack to find a password by matching it
 - **OpenMP** library (`libgomp`) for multithreading
 
 ---
+## Clone the Repository
+
+To get a local copy of the project, use the following command:
+
+```bash
+git clone https://github.com/GGarv/Hash_Cracking.git
+```
 
 ## Steps for Windows
 
