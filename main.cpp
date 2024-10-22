@@ -5,7 +5,7 @@
 #include <chrono>
 
 int main() {
-    std::string target_hash = sha256("password475678");  // Example target hash to crack
+    std::string target_hash = sha256("password756781");  // Example target hash to crack
     std::cout << "Target hash: " << target_hash << std::endl;
 
     // Time measurement without OpenMP
