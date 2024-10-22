@@ -1,0 +1,4 @@
+1.https://www.geeksforgeeks.org/openmp-introduction-with-installation-guide/
+2.https://www.geeksforgeeks.org/sha-256-and-sha-3/
+3.https://www.youtube.com/watch?v=29mF-kqNWpE&t=150s
+4.https://medium.com/@mohaisen/cryptographic-hash-functions-a-hands-on-introduction-100c93a79f65
